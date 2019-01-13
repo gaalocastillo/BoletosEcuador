@@ -3,8 +3,13 @@ package main
 import (
   "net/http"
   "strconv"
+  "database/sql"
+  "log"
+  "fmt"
+
 
   "github.com/gin-gonic/gin"
+   _ "github.com/lib/pq"
 )
 
 
@@ -26,8 +31,17 @@ var jokes = []Joke{
   Joke{7, 0, "How does a penguin build it's house? Igloos it together."},
 }
 
+//function that retrieves a certain venue
 
 func main() {
+  //establish connection with DB
+  db, err := sql.Open("postgres",
+        "postgresql://cucaracha:cucarachaAdmin@localhost:26257/boletos_ecuador_db?ssl=true&sslmode=require&sslrootcert=certs/ca.crt&sslkey=certs/client.cucaracha.key&sslcert=certs/client.cucaracha.crt")
+  if err != nil {
+        log.Fatal("error connecting to the database: ", err)
+  }
+  defer db.Close()
+
   // Set the router as the default one shipped with Gin
   router := gin.Default()
   router.LoadHTMLGlob("views/*")
@@ -47,9 +61,33 @@ func main() {
     })
   })
 
+  router.GET("/venues/:id", func(c *gin.Context){
+    var venue_name string
+    var address string
+    var venue_type string
+
+    if venue_id, err := strconv.Atoi(c.Param("id")); err == nil {
+      // find venue and print name
+      row := db.QueryRow("SELECT name,address,type FROM boletos_ecuador_db.venue WHERE id=$1",venue_id)
+      switch err := row.Scan(&venue_name, &address, &venue_type); err {
+        case sql.ErrNoRows:
+          fmt.Println("No rows were returned!")
+        case nil:
+          fmt.Println("HOLAA")
+          c.HTML(http.StatusOK, "index.tmpl", gin.H{
+            "title": venue_name,
+          })
+      }
+
+    } else {
+      // Joke ID is invalid
+      c.AbortWithStatus(http.StatusNotFound)
+    }
+  })
+
   router.GET("/profile", func(c *gin.Context){
     c.HTML(http.StatusOK, "index.tmpl", gin.H{
-      "title": "Titulo del Sitio",
+      "title": "Title",
     })
   })
 
@@ -89,7 +127,7 @@ func main() {
   api.POST("/jokes/like/:jokeID", LikeJoke)
 
   // Start and run the server
-  router.Run(":3000")
+  router.Run(":3001")
 }
 
 // JokeHandler retrieves a list of available jokes
