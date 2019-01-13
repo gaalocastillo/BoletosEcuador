@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html>
+
+  {{template "header"}}
+
+<body>
+
+    {{template "navbar" .}}
+
+  <div class="boletos-container">
+
+    <h2 class="boletos-events-title align-center"> Eventos Disponibles </h2>
+
+    <div class="card-deck">
+  
+      <div class="card boletos-card">
+        <h5 class="card-header">{{.venue_name}}</h5>
+        <div class="card-body">
+          <h5 class="card-title">{{.city}},{{.country}}</h5>
+          <p class="card-text">{{.address}}</p>
+          <p class="card-text">{{.type}}</p>
+
+          <a href="#" class="btn btn-primary">Editar</a>
+        </div>
+      </div>
+    
+    </div>
+
+    {{template "footer"}}
+  </div>
+
+</body>
+
+</html>

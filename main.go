@@ -64,19 +64,29 @@ func main() {
   router.GET("/venues/:id", func(c *gin.Context){
     var venue_name string
     var address string
+    var city string
+    var country string
     var venue_type string
 
     if venue_id, err := strconv.Atoi(c.Param("id")); err == nil {
       // find venue and print name
-      row := db.QueryRow("SELECT name,address,type FROM boletos_ecuador_db.venue WHERE id=$1",venue_id)
-      switch err := row.Scan(&venue_name, &address, &venue_type); err {
+      row := db.QueryRow("SELECT name,address,city,country,type FROM boletos_ecuador_db.venue WHERE id=$1",venue_id)
+      switch err := row.Scan(&venue_name, &address, &city, &country, &venue_type); err {
         case sql.ErrNoRows:
           fmt.Println("No rows were returned!")
         case nil:
-          fmt.Println("HOLAA")
-          c.HTML(http.StatusOK, "index.tmpl", gin.H{
-            "title": venue_name,
+          c.HTML(http.StatusOK, "venue.tmpl", gin.H{
+            "venue_name": venue_name,
+            "address": address,
+            "city":city,
+            "country":country,
+            "type":venue_type,
+      "user": "not defined",
+            
           })
+        default:
+          panic(err)
+
       }
 
     } else {
