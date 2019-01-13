@@ -31,11 +31,45 @@ func main() {
   // Set the router as the default one shipped with Gin
   router := gin.Default()
   router.LoadHTMLGlob("views/*")
+  router.Static("/stylesheets", "./public/stylesheets")
   // Serve frontend static files
 
   router.GET("/", func(c *gin.Context){
     c.HTML(http.StatusOK, "index.tmpl", gin.H{
       "title": "Titulo del Sitio",
+      "user": "not defined",
+    })
+  })
+
+  router.GET("/events:id", func(c *gin.Context){
+    c.HTML(http.StatusOK, "index.tmpl", gin.H{
+      "title": "Titulo del Sitio",
+    })
+  })
+
+  router.GET("/profile", func(c *gin.Context){
+    c.HTML(http.StatusOK, "index.tmpl", gin.H{
+      "title": "Titulo del Sitio",
+    })
+  })
+
+  router.GET("/checkoutfinish", func(c *gin.Context){
+    c.HTML(http.StatusOK, "index.tmpl", gin.H{
+      "title": "Titulo del Sitio",
+    })
+  })
+
+  router.GET("/checkout", func(c *gin.Context){
+    c.HTML(http.StatusOK, "index.tmpl", gin.H{
+      "title": "Titulo del Sitio",
+    })
+  })
+
+  router.GET("/events", func(c *gin.Context){
+    c.HTML(http.StatusOK, "index.tmpl", gin.H{
+      "title": "Titulo del Sitio",
+      "data": jokes,
+      "user": "not defined",
     })
   })
 

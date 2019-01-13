@@ -1,0 +1,26 @@
+{{define "navbar"}}
+<nav class="boletos-navbar">
+  <div class="boletos-title-box">
+    <div class="bold boletos-title">Bienvenido a Boletos Ecuador</div>
+    <div class="boletos-subtitle">
+      Todos los eventos a un click de distancia.
+    </div>
+  </div>
+  <div class="boletos-login-box">
+    {{if eq .user "not defined" }}
+      <a href="/login">
+        <button class="boletos-session-buttons">Log In</button>
+      </a>
+    {{else}}
+      <ul class="nav navbar-nav navbar-right align-right mt-5">
+        <li class="dropdown">
+         <a class="mr-20 align-right" href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">{{.user}}<span class="caret"></span></a>
+         <ul class="dropdown-menu mr-20  animated fadeIn">
+           <li><a class="drop-toggle-item align-right" href="/logout">Logout</a></li>
+         </ul>
+        </li>
+      </ul>
+    {{end}}
+  </div>
+</nav>
+{{ end }}
