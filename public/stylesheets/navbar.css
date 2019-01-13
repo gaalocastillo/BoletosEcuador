@@ -20,6 +20,12 @@
 }
 
 .boletos-title{
-  font-size: 48px;
+  font-size: 42px;
   color: white;
+}
+
+.boletos-container{
+  padding-top: 32px;
+  padding-left: 10%;
+  padding-right: 10%;
 }

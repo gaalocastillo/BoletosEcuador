@@ -3,19 +3,30 @@
 
   {{template "header"}}
 
-  <body>
+<body>
 
     {{template "navbar" .}}
 
-    <h1>Welcome to Boletos Ecuador App</h1>
-    <h2> {{.title}} </h2>
+  <div class="boletos-container">
+
+    <h2 class="boletos-events-title align-center"> Eventos Disponibles </h2>
+
+    <div class="card-deck">
     {{range .data }}
-      <p>
-        {{.Joke}}
-      </p>
+      <div class="card boletos-card">
+        <h5 class="card-header">Pelicula</h5>
+        <div class="card-body">
+          <h5 class="card-title">19-05-20</h5>
+          <p class="card-text">{{.Joke}}</p>
+          <a href="#" class="btn btn-primary">Mas Informacion</a>
+        </div>
+      </div>
     {{end}}
+    </div>
 
     {{template "footer"}}
+  </div>
 
-  </body>
+</body>
+
 </html>

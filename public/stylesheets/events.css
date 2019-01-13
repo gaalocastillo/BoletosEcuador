@@ -1,0 +1,18 @@
+.card-columns{
+  margin-top: 24px;
+}
+
+.card-deck{
+  margin-top: 24px;
+}
+
+.card-deck > .card
+{
+    width: 29%;
+    flex-wrap: wrap;
+    flex: initial;
+}
+
+.boletos-card{
+  margin-bottom: 16px !important;
+}
