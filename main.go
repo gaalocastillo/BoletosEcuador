@@ -1,6 +1,7 @@
 package main
 
 import (
+  // "fmt"
   "net/http"
   "strconv"
   //"database/sql"
@@ -74,7 +75,6 @@ func main() {
           panic(err)
       }
     } else {
-      // Joke ID is invalid
       c.AbortWithStatus(http.StatusNotFound)
     }
   })
@@ -87,8 +87,12 @@ func main() {
   })
 
   router.GET("/checkoutfinish", func(c *gin.Context){
-    c.HTML(http.StatusOK, "index.tmpl", gin.H{
+    errCode := c.Query("err")
+    // fmt.Println("Err: ", errCode)
+    c.HTML(http.StatusOK, "checkoutfinish.tmpl", gin.H{
       "title": "Titulo del Sitio",
+      "errCode": errCode,
+      "user": "Pepito Pihuave",
     })
   })
 
@@ -124,33 +128,7 @@ func main() {
     api.POST("/purchase", purchaseTickets)
   }
 
-  api.GET("/jokes", JokeHandler)
-  api.POST("/jokes/like/:jokeID", LikeJoke)
 
   // Start and run the server
   router.Run(":3001")
-}
-
-// JokeHandler retrieves a list of available jokes
-func JokeHandler(c *gin.Context) {
-  c.Header("Content-Type", "application/json")
-  c.JSON(http.StatusOK, jokes)
-}
-
-// LikeJoke increments the likes of a particular joke Item
-func LikeJoke(c *gin.Context) {
-  if jokeid, err := strconv.Atoi(c.Param("jokeID")); err == nil {
-    // find joke, and increment likes
-    for i := 0; i < len(jokes); i++ {
-      if jokes[i].ID == jokeid {
-        jokes[i].Likes += 1
-      }
-    }
-
-    // return a pointer to the updated jokes list
-    c.JSON(http.StatusOK, &jokes)
-  } else {
-    // Joke ID is invalid
-    c.AbortWithStatus(http.StatusNotFound)
-  }
 }

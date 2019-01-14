@@ -14,10 +14,10 @@
     <div class="card-deck">
     {{range .data }}
       <div class="card boletos-card">
-        <h5 class="card-header">Evento {{.ID}}</h5>
+        <h5 class="card-header">{{.Name}}</h5>
         <div class="card-body">
-          <h5 class="card-title">19-05-20</h5>
-          <p class="card-text">{{.Joke}}</p>
+          <h5 class="card-title">{{.Date}}</h5>
+          <p class="card-text">{{.Description}}</p>
           <a href="/events/{{.ID}}" class="btn btn-primary">Mas Informacion</a>
         </div>
       </div>
