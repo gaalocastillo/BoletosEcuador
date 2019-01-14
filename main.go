@@ -33,8 +33,9 @@ func main() {
   // Set the router as the default one shipped with Gin
   router := gin.Default()
   router.LoadHTMLGlob("views/*")
-  router.Static("/stylesheets", "./public/stylesheets")
   // Serve frontend static files
+  router.Static("/stylesheets", "./public/stylesheets")
+  router.Static("/js", "./public/js")
 
   router.GET("/", func(c *gin.Context){
     c.HTML(http.StatusOK, "index.tmpl", gin.H{

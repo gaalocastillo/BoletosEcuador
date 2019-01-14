@@ -20,3 +20,16 @@
 .boletos-boton-regresar{
   margin-bottom: 16px !important;
 }
+
+.boletos-events-title{
+  margin-bottom: 16px !important;
+  margin-top: 16px !important;
+}
+
+.list-group-item{
+  background-color: transparent !important;
+}
+
+#boletos-add-ticket{
+  margin-right: 8px !important;
+}
