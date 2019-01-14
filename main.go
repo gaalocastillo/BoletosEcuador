@@ -3,7 +3,6 @@ package main
 import (
   "net/http"
   "strconv"
-
   "github.com/gin-gonic/gin"
 )
 
@@ -41,35 +40,45 @@ func main() {
     })
   })
 
-  router.GET("/events:id", func(c *gin.Context){
+  router.GET("/events", func(c *gin.Context){
     c.HTML(http.StatusOK, "index.tmpl", gin.H{
       "title": "Titulo del Sitio",
+      "data": jokes,
+      "user": "not defined",
     })
+  })
+
+  router.GET("/events/:id", func(c *gin.Context){
+    if eventId, err := strconv.Atoi(c.Param("id")); err == nil {
+      c.HTML(http.StatusOK, "event.tmpl", gin.H{
+        "event": eventId,
+        "user": "not defined",
+      })
+    } else {
+      // Joke ID is invalid
+      c.AbortWithStatus(http.StatusNotFound)
+    }
+
   })
 
   router.GET("/profile", func(c *gin.Context){
     c.HTML(http.StatusOK, "index.tmpl", gin.H{
       "title": "Titulo del Sitio",
+      "user": "Pepito Pihuave"
     })
   })
 
   router.GET("/checkoutfinish", func(c *gin.Context){
-    c.HTML(http.StatusOK, "index.tmpl", gin.H{
+    errCode := c.Query("err")
+    c.HTML(http.StatusOK, "checkoutfinish.tmpl", gin.H{
       "title": "Titulo del Sitio",
+      "errCode": errCode
     })
   })
 
   router.GET("/checkout", func(c *gin.Context){
     c.HTML(http.StatusOK, "index.tmpl", gin.H{
       "title": "Titulo del Sitio",
-    })
-  })
-
-  router.GET("/events", func(c *gin.Context){
-    c.HTML(http.StatusOK, "index.tmpl", gin.H{
-      "title": "Titulo del Sitio",
-      "data": jokes,
-      "user": "not defined",
     })
   })
 
@@ -85,7 +94,6 @@ func main() {
     })
   }
 
-  api.GET("/jokes", JokeHandler)
   api.POST("/jokes/like/:jokeID", LikeJoke)
 
   // Start and run the server
@@ -93,10 +101,7 @@ func main() {
 }
 
 // JokeHandler retrieves a list of available jokes
-func JokeHandler(c *gin.Context) {
-  c.Header("Content-Type", "application/json")
-  c.JSON(http.StatusOK, jokes)
-}
+
 
 // LikeJoke increments the likes of a particular joke Item
 func LikeJoke(c *gin.Context) {

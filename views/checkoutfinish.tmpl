@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+
+  {{template "header"}}
+
+<body>
+
+    {{template "navbar" .}}
+
+  <div class="boletos-container">
+
+    <a class="btn btn-secondary boletos-boton-regresar" href="/events" role="button">Regresar a Eventos</a>
+
+
+    {{if eq .errCode "0" }}
+      <h2 class="boletos-events-title align-center"> Compra Realizada con Exito! </h2>
+    {{else}}
+      <h2 class="boletos-events-title align-center"> Algo fallo. Por favor vuelve a intentarlo en aproximadamente 10 minutos. </h2>
+    {{end}}
+
+    {{template "footer"}}
+  </div>
+
+</body>
+
+</html>
