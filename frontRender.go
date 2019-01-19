@@ -3,6 +3,7 @@ package main
 import (
 	"net/http"
   "strconv"
+  "fmt"
 
 	"github.com/gin-gonic/contrib/sessions"
 	"github.com/gin-gonic/gin"
@@ -38,9 +39,12 @@ func renderEvent(c *gin.Context) {
 func renderLogin(c *gin.Context) {
   session := sessions.Default(c)
   user := session.Get("user")
+  statusCode := c.Query("statusCode")
+  fmt.Println("Err: ", user)
   if user == nil {
     c.HTML(http.StatusOK, "login.tmpl", gin.H{
-      "user": user
+      "user": user,
+      "statusCode": statusCode,
     })
   } else {
     c.Redirect(http.StatusMovedPermanently, "/events")
@@ -51,9 +55,7 @@ func renderCheckoutFinish(c *gin.Context) {
   session := sessions.Default(c)
   user := session.Get("user")
   if user == nil {
-    c.HTML(http.StatusOK, "login.tmpl", gin.H{
-      "user": user
-    })
+    c.Redirect(http.StatusMovedPermanently, "/login?statusCode=3")
   } else {
     errCode := c.Query("err")
     c.HTML(http.StatusOK, "checkoutfinish.tmpl", gin.H{
@@ -67,9 +69,7 @@ func renderProfile(c *gin.Context) {
   session := sessions.Default(c)
   user := session.Get("user")
   if user == nil {
-    c.HTML(http.StatusOK, "login.tmpl", gin.H{
-      "user": user
-    })
+    c.Redirect(http.StatusMovedPermanently, "/login?statusCode=2")
   } else {
     errCode := c.Query("err")
     c.HTML(http.StatusOK, "profile.tmpl", gin.H{

@@ -9,6 +9,22 @@
   box-shadow: 0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23);
 }
 
+.no-decoration:link {
+  text-decoration: none !important;
+}
+
+.no-decoration:visited {
+  text-decoration: none !important;
+}
+
+.no-decoration:hover {
+  text-decoration: none !important;
+}
+
+.no-decoration:active {
+  text-decoration: none !important;
+}
+
 .boletos-title-box{
   flex-direction: column;
   display: flex;
