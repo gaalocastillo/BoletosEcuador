@@ -61,7 +61,7 @@ func logout(c *gin.Context) {
 		log.Println(user)
 		session.Delete("user")
 		session.Save()
-		c.Redirect(http.StatusMovedPermanently, "/events")
+		c.JSON(200, gin.H{})
 	}
 }
 
