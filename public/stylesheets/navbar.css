@@ -9,6 +9,11 @@
   box-shadow: 0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23);
 }
 
+.boletos-login-box{
+  margin: 24px;
+  margin-right: 48px !important;
+}
+
 .no-decoration:link {
   text-decoration: none !important;
 }

@@ -45,14 +45,13 @@ func main() {
   // private := router.Group("/private", AuthRequired())
   // private.GET("/", privateG)
 
-  router.POST("/api/login", login)
-  router.GET("/api/logout", logout)
-
   router.GET("/events", renderEvents)
   router.GET("/events/:id", renderEvent)
   router.GET("/login", renderLogin)
   router.GET("/checkoutfinish", renderCheckoutFinish)
   router.GET("/profile", renderProfile)
+  router.POST("/api/login", login)
+  router.GET("/logout", logout)
 
   router.GET("/", func(c *gin.Context){
     c.Redirect(http.StatusMovedPermanently, "/events")
