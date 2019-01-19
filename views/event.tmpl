@@ -18,39 +18,41 @@
       <li class="list-group-item"> Descripcion: {{.event.Description}} </li>
     </ul>
 
-    {{if eq .event.IsSoldOut "si" }}
-      <h2 class="boletos-events-title align-center"> ENTRADAS NO DISPONIBLES </h2>
-    {{else}}
-      <h3 class="boletos-events-title align-center"> Comprar Boletos: </h3>
-      <h4> Seleccionar Ticket:  </h4>
-      <p> Asegurate de bloquear tus boletos cuando los escogas dando click en el boton Bloquear Boleto </p>
+    {{if .user}}
+      {{if eq .event.IsSoldOut "si" }}
+        <h2 class="boletos-events-title align-center"> ENTRADAS NO DISPONIBLES </h2>
+      {{else}}
+        <h3 class="boletos-events-title align-center"> Comprar Boletos: </h3>
+        <h4> Seleccionar Ticket:  </h4>
+        <p> Asegurate de bloquear tus boletos cuando los escogas dando click en el boton Bloquear Boleto </p>
 
-      <form>
-        <div class="boletos-tickets-a-comprar">
-          <div class="form-row align-items-center boletos-ticket-selector">
-            <div class="col-auto mb-2">
-              <label class="mr-sm-6" for="inlineFormCustomSelect">Selecciona tu boleto: </label>
-              <select class="custom-select mr-sm-2" id="inlineFormCustomSelect">
-                <option selected>Escoge...</option>
-                <option value="1">1</option>
-                <option value="2">2</option>
-                <option value="3">3</option>
-              </select>
-            </div>
-            <div class="col-auto my-1">
-              <button type="button" class="btn btn-secondary btn-sm">Bloquear Boleto</button>
+        <form>
+          <div class="boletos-tickets-a-comprar">
+            <div class="form-row align-items-center boletos-ticket-selector">
+              <div class="col-auto mb-2">
+                <label class="mr-sm-6" for="inlineFormCustomSelect">Selecciona tu boleto: </label>
+                <select class="custom-select mr-sm-2" id="inlineFormCustomSelect">
+                  <option selected>Escoge...</option>
+                  <option value="1">1</option>
+                  <option value="2">2</option>
+                  <option value="3">3</option>
+                </select>
+              </div>
+              <div class="col-auto my-1">
+                <button type="button" class="btn btn-secondary btn-sm">Bloquear Boleto</button>
+              </div>
             </div>
           </div>
-        </div>
-        <div class="form-row">
-          <button type="button" id="boletos-add-ticket" class="btn btn-secondary btn-sm">Añadir Boleto</button>
-          <button type="button" id="boletos-remove-ticket" class="btn btn-danger btn-sm">Remover Boleto</button>
-        </div>
-        <div style="margin-top: 16px;">
-          <button type="submit" class="btn btn-primary btn-block btn-outline-primary">Comprar</button>
-        </div>
-      </form>
+          <div class="form-row">
+            <button type="button" id="boletos-add-ticket" class="btn btn-secondary btn-sm">Añadir Boleto</button>
+            <button type="button" id="boletos-remove-ticket" class="btn btn-danger btn-sm">Remover Boleto</button>
+          </div>
+          <div style="margin-top: 16px;">
+            <button type="submit" class="btn btn-primary btn-block btn-outline-primary">Comprar</button>
+          </div>
+        </form>
 
+      {{end}}
     {{end}}
 
     {{template "footer"}}

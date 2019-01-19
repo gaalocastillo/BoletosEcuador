@@ -11,16 +11,33 @@
 
     <h2 class="boletos-events-title align-center"> Inicia Sesion </h2>
 
-    <form>
+    {{if (not .statusCode)}}
+      <div></div>
+    {{else if (and (.statusCode) (eq .statusCode "1" ))}}
+      <div class="alert alert-danger" role="alert">
+        Credenciales incorrectas! Vuelva a intentarlo
+      </div>
+    {{else if (and (.statusCode) (eq .statusCode "2")) }}
+      <div class="alert alert-danger" role="alert">
+        Ocurrio un error! Vuelva a intentarlo
+      </div>
+    {{else if (and (.statusCode) (eq .statusCode "3")) }}
+      <div class="alert alert-primary" role="alert">
+        Debes iniciar sesion para utilizar esta funcion!
+      </div>
+    {{else}}
+    {{end}}
+
+    <form action="/api/login" method="post">
       <div class="form-group">
         <label for="exampleInputEmail1">Usuario</label>
-        <input type="email" class="form-control" id="inputEmail1" placeholder="Enter email">
+        <input type="text" class="form-control" name="username" id="inputEmail1" placeholder="Enter username">
       </div>
       <div class="form-group">
         <label for="exampleInputPassword1">Password</label>
-        <input type="password" class="form-control" id="inputPassword1" placeholder="Password">
+        <input type="password" class="form-control" name="password" id="inputPassword1" placeholder="Password">
       </div>
-      <button type="button" class="btn btn-primary login-button">LOGIN</button>
+      <button type="submit" class="btn btn-primary login-button">LOGIN</button>
     </form>
 
     {{template "footer"}}

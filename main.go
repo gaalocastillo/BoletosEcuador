@@ -42,8 +42,8 @@ func main() {
   router.Static("/stylesheets", "./public/stylesheets")
   router.Static("/js", "./public/js")
 
-  private := router.Group("/private", AuthRequired())
-  private.GET("/", privateG)
+  // private := router.Group("/private", AuthRequired())
+  // private.GET("/", privateG)
 
   router.POST("/api/login", login)
   router.GET("/api/logout", logout)
@@ -57,53 +57,6 @@ func main() {
   router.GET("/", func(c *gin.Context){
     c.Redirect(http.StatusMovedPermanently, "/events")
   })
-
-  // router.GET("/events", func(c *gin.Context){
-  //   c.HTML(http.StatusOK, "index.tmpl", gin.H{
-  //     "title": "Titulo del Sitio",
-  //     "data": events,
-  //     "user": "not defined",
-  //   })
-  // })
-
-  // router.GET("/events/:id", func(c *gin.Context){
-  //   if eventId, err := strconv.Atoi(c.Param("id")); err == nil {
-  //     for i := 0; i < len(events); i++ {
-  //       if events[i].ID == eventId {
-  //         c.HTML(http.StatusOK, "event.tmpl", gin.H{
-  //           "event": events[i],
-  //           "user": "not defined",
-  //         })
-  //       }
-  //     }
-  //   } else {
-  //     c.AbortWithStatus(http.StatusNotFound)
-  //   }
-  // })
-
-  // router.GET("/profile", func(c *gin.Context){
-  //   c.HTML(http.StatusOK, "index.tmpl", gin.H{
-  //     "title": "Titulo del Sitio",
-  //     "user": "Pepito Pihuave",
-  //   })
-  // })
-
-  // router.GET("/login", func(c *gin.Context){
-  //   c.HTML(http.StatusOK, "login.tmpl", gin.H{
-  //     "title": "Titulo del Sitio",
-  //     "user": "Pepito Pihuave",
-  //   })
-  // })
-
-  // router.GET("/checkoutfinish", func(c *gin.Context){
-  //   errCode := c.Query("err")
-  //   // fmt.Println("Err: ", errCode)
-  //   c.HTML(http.StatusOK, "checkoutfinish.tmpl", gin.H{
-  //     "title": "Titulo del Sitio",
-  //     "errCode": errCode,
-  //     "user": "Pepito Pihuave",
-  //   })
-  // })
 
   router.GET("/checkout", func(c *gin.Context){
     c.HTML(http.StatusOK, "index.tmpl", gin.H{

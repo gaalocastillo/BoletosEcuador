@@ -20,10 +20,9 @@ func AuthRequired() gin.HandlerFunc {
 		if user == nil {
 			// You'd normally redirect to login page
       fmt.Println("Err: ", user)
-			c.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{"error": "Invalid session token"})
+			c.Redirect(http.StatusMovedPermanently, "/login?statusCode=3")
 		} else {
 			// Continue down the chain to handler etc
-      fmt.Println("LOL: ", user)
 			c.Next()
 		}
 	}
@@ -35,32 +34,34 @@ func login(c *gin.Context) {
 	password := c.PostForm("password")
 
 	if strings.Trim(username, " ") == "" || strings.Trim(password, " ") == "" {
-		c.JSON(http.StatusUnauthorized, gin.H{"error": "Parameters can't be empty"})
+		c.Redirect(http.StatusMovedPermanently, "/login?statusCode=1")
 		return
 	}
 	if username == "hello" && password == "itsme" {
 		session.Set("user", username) //In real world usage you'd set this to the users ID
 		err := session.Save()
 		if err != nil {
-			c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to generate session token"})
+			c.Redirect(http.StatusMovedPermanently, "/login?statusCode=2")
 		} else {
-			c.JSON(http.StatusOK, gin.H{"message": "Successfully authenticated user"})
+			c.Redirect(http.StatusMovedPermanently, "/events")
 		}
 	} else {
-		c.JSON(http.StatusUnauthorized, gin.H{"error": "Authentication failed"})
+		c.Redirect(http.StatusMovedPermanently, "/login?statusCode=1")
 	}
 }
 
 func logout(c *gin.Context) {
 	session := sessions.Default(c)
 	user := session.Get("user")
+  fmt.Println("Err: ", user)
 	if user == nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid session token"})
 	} else {
+		fmt.Println("ENTRE ")
 		log.Println(user)
 		session.Delete("user")
 		session.Save()
-		c.JSON(http.StatusOK, gin.H{"message": "Successfully logged out"})
+		c.Redirect(http.StatusMovedPermanently, "/events")
 	}
 }
 
