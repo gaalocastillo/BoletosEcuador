@@ -8,6 +8,7 @@ import (
   "log"
 
   "github.com/jinzhu/gorm"
+  "github.com/gin-gonic/contrib/sessions"
   "github.com/gin-gonic/gin"
    _"github.com/jinzhu/gorm/dialects/postgres"
 
@@ -32,70 +33,77 @@ func main() {
 
   // Set the router as the default one shipped with Gin
   router := gin.Default()
+
+  store := sessions.NewCookieStore([]byte("secret"))
+  router.Use(sessions.Sessions("mysession", store))
+
   router.LoadHTMLGlob("views/*")
   // Serve frontend static files
   router.Static("/stylesheets", "./public/stylesheets")
   router.Static("/js", "./public/js")
 
+  private := router.Group("/private", AuthRequired())
+  private.GET("/", privateG)
+
+  router.POST("/api/login", login)
+  router.GET("/api/logout", logout)
+
+  router.GET("/events", renderEvents)
+  router.GET("/events/:id", renderEvent)
+  router.GET("/login", renderLogin)
+  router.GET("/checkoutfinish", renderCheckoutFinish)
+  router.GET("/profile", renderProfile)
+
   router.GET("/", func(c *gin.Context){
-    c.HTML(http.StatusOK, "index.tmpl", gin.H{
-      "title": "Titulo del Sitio",
-      "user": "not defined",
-    })
+    c.Redirect(http.StatusMovedPermanently, "/events")
   })
 
-  router.GET("/events:id", func(c *gin.Context){
-    c.HTML(http.StatusOK, "index.tmpl", gin.H{
-      "title": "Titulo del Sitio",
-    })
-  })
+  // router.GET("/events", func(c *gin.Context){
+  //   c.HTML(http.StatusOK, "index.tmpl", gin.H{
+  //     "title": "Titulo del Sitio",
+  //     "data": events,
+  //     "user": "not defined",
+  //   })
+  // })
 
-  /*router.GET("/venues/:id", func(c *gin.Context){
-    var venue_name string
-    var address string
-    var city string
-    var country string
-    var venue_type string
-    if venue_id, err := strconv.Atoi(c.Param("id")); err == nil {
-      // find venue and print name
-      row := db.QueryRow("SELECT name,address,city,country,type FROM boletos_ecuador_db.venue WHERE id=$1",venue_id)
-      switch err := row.Scan(&venue_name, &address, &city, &country, &venue_type); err {
-        case sql.ErrNoRows:
-          fmt.Println("No rows were returned!")
-        case nil:
-          c.HTML(http.StatusOK, "venue.tmpl", gin.H{
-            "venue_name": venue_name,
-            "address": address,
-            "city":city,
-            "country":country,
-            "type":venue_type,
-      "user": "not defined",
+  // router.GET("/events/:id", func(c *gin.Context){
+  //   if eventId, err := strconv.Atoi(c.Param("id")); err == nil {
+  //     for i := 0; i < len(events); i++ {
+  //       if events[i].ID == eventId {
+  //         c.HTML(http.StatusOK, "event.tmpl", gin.H{
+  //           "event": events[i],
+  //           "user": "not defined",
+  //         })
+  //       }
+  //     }
+  //   } else {
+  //     c.AbortWithStatus(http.StatusNotFound)
+  //   }
+  // })
 
-          })
-        default:
-          panic(err)
-      }
-    } else {
-      c.AbortWithStatus(http.StatusNotFound)
-    }
-  })
-  */
+  // router.GET("/profile", func(c *gin.Context){
+  //   c.HTML(http.StatusOK, "index.tmpl", gin.H{
+  //     "title": "Titulo del Sitio",
+  //     "user": "Pepito Pihuave",
+  //   })
+  // })
 
-  router.GET("/profile", func(c *gin.Context){
-    c.HTML(http.StatusOK, "index.tmpl", gin.H{
-      "title": "Title",
-    })
-  })
+  // router.GET("/login", func(c *gin.Context){
+  //   c.HTML(http.StatusOK, "login.tmpl", gin.H{
+  //     "title": "Titulo del Sitio",
+  //     "user": "Pepito Pihuave",
+  //   })
+  // })
 
-  router.GET("/checkoutfinish", func(c *gin.Context){
-    errCode := c.Query("err")
-    // fmt.Println("Err: ", errCode)
-    c.HTML(http.StatusOK, "checkoutfinish.tmpl", gin.H{
-      "title": "Titulo del Sitio",
-      "errCode": errCode,
-      "user": "Pepito Pihuave",
-    })
-  })
+  // router.GET("/checkoutfinish", func(c *gin.Context){
+  //   errCode := c.Query("err")
+  //   // fmt.Println("Err: ", errCode)
+  //   c.HTML(http.StatusOK, "checkoutfinish.tmpl", gin.H{
+  //     "title": "Titulo del Sitio",
+  //     "errCode": errCode,
+  //     "user": "Pepito Pihuave",
+  //   })
+  // })
 
   router.GET("/checkout", func(c *gin.Context){
     c.HTML(http.StatusOK, "index.tmpl", gin.H{
