@@ -93,15 +93,7 @@ type Joke struct {
   // Joke contains information about a single Joke
 type DummySeat struct {
 	ID     		int     `json:"id" binding:"required"`
-	Number  	int     `json:"likes" binding:"required"`
-	ZoneName   	string  `json:"joke" binding:"required"`
+	Number  	int     `json:"number" binding:"required"`
+	ZoneName   	string  `json:"zoneName" binding:"required"`
+	ZonePrice   float64	`json:"zonePrice" binding:"required"`
   }
-
-  var seats = []DummySeat{
-	DummySeat{1, 101, "General"},
-	DummySeat{2, 102, "General"},
-	DummySeat{3, 103, "General"},
-	DummySeat{4, 201, "Tribuna"},
-	DummySeat{5, 202, "Tribuna"},
-	DummySeat{6, 301, "VIP"},
-}

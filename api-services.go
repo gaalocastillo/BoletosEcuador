@@ -36,7 +36,44 @@ func fetchSingleEvent(c *gin.Context) {
 	}
 	c.JSON(http.StatusOK, gin.H{"status": http.StatusOK, "data": event})
 }
-  
+
+// fetchAllEvents fetches all events
+func fetchAvailableSeats(c *gin.Context) {	
+		var seats1 = []DummySeat{
+		DummySeat{1, 101, "General", 10.0},
+		DummySeat{2, 102, "General", 10.0},
+		DummySeat{3, 103, "General", 10.0},
+		DummySeat{4, 201, "Tribuna", 15.0},
+		DummySeat{5, 202, "Tribuna", 15.0},
+		DummySeat{6, 301, "VIP", 30.0},
+	}
+
+	var seats2 = []DummySeat{
+		DummySeat{1, 1, "General", 5.0},
+		DummySeat{2, 2, "General", 5.0},
+		DummySeat{3, 3, "General", 5.0},
+	}
+  //  var _todos []transformedTodo
+	//db.Find(&events)
+	eventID, _ := strconv.Atoi(c.Param("eventID"))
+	if eventID <= 0 {
+	  c.JSON(http.StatusNotFound, gin.H{"status": http.StatusNotFound, "message": "No event found!"})
+	  return
+	}
+
+	if eventID == 1 {
+		c.JSON(http.StatusOK, gin.H{"status": http.StatusOK, "data": seats1})
+		return
+	}
+	if eventID == 2{
+		c.JSON(http.StatusOK, gin.H{"status": http.StatusOK, "data": seats2})
+		return
+	}
+	return
+}
+
+
+
    // insert new tickets purchase
 func purchaseTickets(c *gin.Context) {  
 	seatsAmount, _ := strconv.Atoi(c.PostForm("seats-amount"))

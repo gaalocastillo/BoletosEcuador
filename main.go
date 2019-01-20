@@ -122,7 +122,7 @@ func main() {
 
     api.GET("/events", fetchAllEvents)
     api.GET("/events/:id", fetchSingleEvent)
-    api.GET("/seats/eventID")
+    api.GET("/seats/:eventID", fetchAvailableSeats)
     api.POST("/purchase", purchaseTickets)
   }
 
