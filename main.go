@@ -5,100 +5,12 @@ import (
   "strconv"
   //"database/sql"
   "log"
-  "fmt"
 
   "github.com/jinzhu/gorm"  
   "github.com/gin-gonic/gin"
    _"github.com/jinzhu/gorm/dialects/postgres"
   
 )
-
-
-// Joke contains information about a single Joke
-type Joke struct {
-  ID     int     `json:"id" binding:"required"`
-  Likes  int     `json:"likes"`
-  Joke   string  `json:"joke" binding:"required"`
-}
-
-type (
-  VenueModel struct {
-    //un venue tiene varias zonas
-    gorm.Model
-    VenueType   string      `json:"type"`
-    Name         string      `json:"name"`
-    Country      int         `json:"country"`
-    City         int         `json:"city"`
-    Address      int         `json:"address"`
-    Zones []ZoneModel
-  }
-
-  EventModel struct {
-    //un evento pertenece a un venue
-    gorm.Model
-    Name         string      `json:"name"`
-    Date         string      `json:"date"`
-    Description  string      `json:"description"`
-    EventType    string      `json:"string"`
-    IsSoldOut    bool        `json:"issoldout"`
-    VenueModelID uint        `json:"venuemodelid"`
-    VenueModel   VenueModel  `json:"venuemodel"`
-   }
-
-   ZoneModel struct {
-    //un venue tiene varias zonas
-    //una zona tiene varios asientos
-    gorm.Model
-    Name         string      `json:"name"`
-    Price        float64     `json:"country"`
-    VenueModelID uint         `json:"venuemodelid"`  
-    Seats []SeatModel  
-   }
-
-   SeatModel struct {
-    //una zona tiene varios asientos
-    gorm.Model
-    Number       int         `json:"number"`
-    IsAvailable  int         `json:"isavailable"`
-    ZoneModelID  uint        `json:"zonemodelid"`  
-   }
-
-   UserModel struct {
-    //un usuario tiene varios tickets
-    gorm.Model
-    Username     string      `json:"username"`
-    Age          string      `json:"age"`
-    User_type         int    `json:"type"`
-    Password     string      `json:"password"`
-    Tickets []TicketModel
-    }
-
-   TicketModel struct {
-    //Un ticket pertenece a un usuario
-    //Un ticket tiene un asiento
-    //Un ticket pertenece a un evento
-    gorm.Model
-    Number       int         `json:"number"`
-    SeatModelID  uint        `json:"seatmodelid"`
-    SeatModel    SeatModel   `json:"seatmodel"`
-    UserModelID  uint        `json:"usermodelid"`
-    EventModel   EventModel  `json:"eventmodel"`
-    EventModelID uint        `json:"eventmodelid"`
-  }
- )
-
-// We'll create a list of jokes
-var jokes = []Joke{
-  Joke{1, 0, "Did you hear about the restaurant on the moon? Great food, no atmosphere."},
-  Joke{2, 0, "What do you call a fake noodle? An Impasta."},
-  Joke{3, 0, "How many apples grow on a tree? All of them."},
-  Joke{4, 0, "Want to hear a joke about paper? Nevermind it's tearable."},
-  Joke{5, 0, "I just watched a program about beavers. It was the best dam program I've ever seen."},
-  Joke{6, 0, "Why did the coffee file a police report? It got mugged."},
-  Joke{7, 0, "How does a penguin build it's house? Igloos it together."},
-}
-
-//function that retrieves a certain venue
 
 func main() {
   //establish connection with DB
@@ -218,56 +130,6 @@ func main() {
 
   // Start and run the server
   router.Run(":3001")
-}
-
-/**
-API web services functions
-*/
-// fetchAllEvents fetches all events
-func fetchAllEvents(c *gin.Context) {
-  var events []EventModel
-//  var _todos []transformedTodo
-//  db.Find(&events)
-  if len(events) <= 0 {
-    c.JSON(http.StatusNotFound, gin.H{"status": http.StatusNotFound, "message": "No event found!"})
-    return
-  }
-  c.JSON(http.StatusOK, gin.H{"status": http.StatusOK, "data": events})
- }
-
-// fetchSingleEvent fetches a single event
-func fetchSingleEvent(c *gin.Context) {
-  var event EventModel
-//  eventID := c.Param("id")
-//  db.First(&todo, todoID)
-  if event.ID == 0 {
-    c.JSON(http.StatusNotFound, gin.H{"status": http.StatusNotFound, "message": "No event found!"})
-    return
-  }
-  c.JSON(http.StatusOK, gin.H{"status": http.StatusOK, "data": event})
- }
-
- // insert new tickets purchase
-func purchaseTickets(c *gin.Context) {  
-  seatsAmount, _ := strconv.Atoi(c.PostForm("seats-amount"))
-  userID, _ := strconv.Atoi(c.PostForm("user-ID"))
-  eventID, _ := strconv.Atoi(c.PostForm("event-ID"))
-  seatsIds := make([]int, seatsAmount)
-  eventID = eventID +1
-  userID = userID +1
-
-  for i := 0; i < seatsAmount; i++ {
-    //ticketsIds[i] = strconv. c.PostForm("tickets-ids")[i]
-    // if jokes[i].ID == jokeid {
-    //  jokes[i].Likes += 1
-   // }
-  }
-//  ticketsIds = c.PostForm("tickets-ids")
-  fmt.Println(seatsIds)
-//  completed, _ := strconv.Atoi(c.PostForm("completed"))
- // todo := todoModel{Title: c.PostForm("title"), Completed: completed}
-//  db.Save(&todo)
-  //c.JSON(http.StatusCreated, gin.H{"status": http.StatusCreated, "message": "Todo item created successfully!", "resourceId": todo.ID})
 }
 
 // JokeHandler retrieves a list of available jokes
