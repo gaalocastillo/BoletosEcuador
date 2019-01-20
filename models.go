@@ -50,8 +50,8 @@ type (
 	  //un usuario tiene varios tickets
 	  gorm.Model
 	  Username     string      `json:"username"`
-	  Age          string      `json:"age"`
-	  User_type    int         `json:"type"`
+	  Age          int      `json:"age"`
+	  User_type    string         `json:"type"`
 	  Password     string      `json:"password"`
 	  Tickets []TicketModel
 	  }
@@ -88,3 +88,20 @@ type Joke struct {
 	Joke{6, 0, "Why did the coffee file a police report? It got mugged."},
 	Joke{7, 0, "How does a penguin build it's house? Igloos it together."},
   }
+
+
+  // Joke contains information about a single Joke
+type DummySeat struct {
+	ID     		int     `json:"id" binding:"required"`
+	Number  	int     `json:"likes" binding:"required"`
+	ZoneName   	string  `json:"joke" binding:"required"`
+  }
+
+  var seats = []DummySeat{
+	DummySeat{1, 101, "General"},
+	DummySeat{2, 102, "General"},
+	DummySeat{3, 103, "General"},
+	DummySeat{4, 201, "Tribuna"},
+	DummySeat{5, 202, "Tribuna"},
+	DummySeat{6, 301, "VIP"},
+}

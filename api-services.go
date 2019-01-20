@@ -16,28 +16,29 @@ API web services functions
 func fetchAllEvents(c *gin.Context) {
 	var events []EventModel
   //  var _todos []transformedTodo
-  //  db.Find(&events)
+  //db.Find(&events)
 	if len(events) <= 0 {
 	  c.JSON(http.StatusNotFound, gin.H{"status": http.StatusNotFound, "message": "No event found!"})
 	  return
 	}
 	c.JSON(http.StatusOK, gin.H{"status": http.StatusOK, "data": events})
-   }
+}
   
   // fetchSingleEvent fetches a single event
-  func fetchSingleEvent(c *gin.Context) {
+func fetchSingleEvent(c *gin.Context) {
 	var event EventModel
-  //  eventID := c.Param("id")
-  //  db.First(&todo, todoID)
+  //eventID := c.Param("id")
+	//  db.First(&todo, todoID)
+	// db.First(&event, eventID)
 	if event.ID == 0 {
 	  c.JSON(http.StatusNotFound, gin.H{"status": http.StatusNotFound, "message": "No event found!"})
 	  return
 	}
 	c.JSON(http.StatusOK, gin.H{"status": http.StatusOK, "data": event})
-   }
+}
   
    // insert new tickets purchase
-  func purchaseTickets(c *gin.Context) {  
+func purchaseTickets(c *gin.Context) {  
 	seatsAmount, _ := strconv.Atoi(c.PostForm("seats-amount"))
 	userID, _ := strconv.Atoi(c.PostForm("user-ID"))
 	eventID, _ := strconv.Atoi(c.PostForm("event-ID"))
@@ -57,4 +58,4 @@ func fetchAllEvents(c *gin.Context) {
    // todo := todoModel{Title: c.PostForm("title"), Completed: completed}
   //  db.Save(&todo)
 	//c.JSON(http.StatusCreated, gin.H{"status": http.StatusCreated, "message": "Todo item created successfully!", "resourceId": todo.ID})
-  }
+}
