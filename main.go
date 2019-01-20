@@ -3,13 +3,13 @@ package main
 import (
   "net/http"
   "strconv"
-  "database/sql"
+  //"database/sql"
   "log"
   "fmt"
 
-//  "github.com/jinzhu/gorm"  
+  "github.com/jinzhu/gorm"  
   "github.com/gin-gonic/gin"
-   _ "github.com/lib/pq"
+   _"github.com/jinzhu/gorm/dialects/postgres"
   
 )
 
@@ -23,56 +23,64 @@ type Joke struct {
 
 type (
   VenueModel struct {
-  // gorm.Model
-   Type         string      `json:"type"`
-   Name         string      `json:"name"`
-   Country      int         `json:"country"`
-   City         int         `json:"city"`
-   Address      int         `json:"address"`
+    //un venue tiene varias zonas
+    gorm.Model
+    VenueType   string      `json:"type"`
+    Name         string      `json:"name"`
+    Country      int         `json:"country"`
+    City         int         `json:"city"`
+    Address      int         `json:"address"`
+    Zones []ZoneModel
   }
 
   EventModel struct {
-  //  gorm.Model
-    ID           uint        `json:"id"`
+    //un evento pertenece a un venue
+    gorm.Model
     Name         string      `json:"name"`
     Date         string      `json:"date"`
     Description  string      `json:"description"`
-    Type         string      `json:"string"`
+    EventType    string      `json:"string"`
     IsSoldOut    bool        `json:"issoldout"`
-    VenueModel   VenueModel  `json:"venuemodel"`
     VenueModelID uint        `json:"venuemodelid"`
+    VenueModel   VenueModel  `json:"venuemodel"`
    }
 
    ZoneModel struct {
-//    gorm.Model
+    //un venue tiene varias zonas
+    //una zona tiene varios asientos
+    gorm.Model
     Name         string      `json:"name"`
     Price        float64     `json:"country"`
-    VenueModel   VenueModel  `json:"venuemodel"`
-    VenueModelID uint        `json:"venuemodelid"`
+    VenueModelID uint         `json:"venuemodelid"`  
+    Seats []SeatModel  
    }
 
    SeatModel struct {
-//    gorm.Model
+    //una zona tiene varios asientos
+    gorm.Model
     Number       int         `json:"number"`
     IsAvailable  int         `json:"isavailable"`
-    ZoneModel    ZoneModel   `json:"zonemodel"`
-    ZoneModelID  uint        `json:"zonemodelid"`
+    ZoneModelID  uint        `json:"zonemodelid"`  
    }
 
    UserModel struct {
-    //    gorm.Model
-        Username     string      `json:"username"`
-        Age          string      `json:"age"`
-        Type         int         `json:"type"`
-        Password     string      `json:"password"`
+    //un usuario tiene varios tickets
+    gorm.Model
+    Username     string      `json:"username"`
+    Age          string      `json:"age"`
+    User_type         int    `json:"type"`
+    Password     string      `json:"password"`
+    Tickets []TicketModel
     }
 
    TicketModel struct {
-//    gorm.Model
+    //Un ticket pertenece a un usuario
+    //Un ticket tiene un asiento
+    //Un ticket pertenece a un evento
+    gorm.Model
     Number       int         `json:"number"`
-    SeatModel    SeatModel   `json:"seatmodel"`
     SeatModelID  uint        `json:"seatmodelid"`
-    UserModel    UserModel   `json:"usermodel"`
+    SeatModel    SeatModel   `json:"seatmodel"`
     UserModelID  uint        `json:"usermodelid"`
     EventModel   EventModel  `json:"eventmodel"`
     EventModelID uint        `json:"eventmodelid"`
@@ -94,12 +102,20 @@ var jokes = []Joke{
 
 func main() {
   //establish connection with DB
-  db, err := sql.Open("postgres",
+  /*db, err := sql.Open("postgres",
         "postgresql://cucaracha:cucarachaAdmin@localhost:26257/boletos_ecuador_db?ssl=true&sslmode=require&sslrootcert=certs/ca.crt&sslkey=certs/client.cucaracha.key&sslcert=certs/client.cucaracha.crt")
   if err != nil {
         log.Fatal("error connecting to the database: ", err)
   }
+  defer db.Close()*/
+  const addr = "postgresql://cucaracha:cucarachaAdmin@localhost:26257/boletos_ecuador_db?ssl=true&sslmode=require&sslrootcert=certs/ca.crt&sslkey=certs/client.cucaracha.key&sslcert=certs/client.cucaracha.crt"
+  db, err := gorm.Open("postgres", addr)
+  if err != nil {
+      log.Fatal(err)
+  }
   defer db.Close()
+
+  db.AutoMigrate(&VenueModel{})
 
   // Set the router as the default one shipped with Gin
   router := gin.Default()
@@ -120,7 +136,7 @@ func main() {
     })
   })
 
-  router.GET("/venues/:id", func(c *gin.Context){
+  /*router.GET("/venues/:id", func(c *gin.Context){
     var venue_name string
     var address string
     var city string
@@ -153,6 +169,7 @@ func main() {
       c.AbortWithStatus(http.StatusNotFound)
     }
   })
+  */
 
   router.GET("/profile", func(c *gin.Context){
     c.HTML(http.StatusOK, "index.tmpl", gin.H{
