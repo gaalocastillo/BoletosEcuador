@@ -33,6 +33,7 @@ type (
 
   EventModel struct {
   //  gorm.Model
+    ID           uint        `json:"id"`
     Name         string      `json:"name"`
     Date         string      `json:"date"`
     Description  string      `json:"description"`
@@ -190,18 +191,8 @@ func main() {
       })
     })
 
-    api.GET("/events", func(c *gin.Context) {
-      c.JSON(http.StatusOK, gin.H {
-        "message": "pong",
-        "data": jokes,
-      })
-    })
-
-    api.GET("/events/:id", func(c *gin.Context) {
-      c.JSON(http.StatusOK, gin.H {
-        "message": "pong",
-      })
-    })
+    api.GET("/events", fetchAllEvents)
+    api.GET("/events/:id", fetchSingleEvent)
 
     api.POST("/purchase", func(c *gin.Context) {
       c.JSON(http.StatusOK, gin.H {
@@ -216,6 +207,35 @@ func main() {
   // Start and run the server
   router.Run(":3001")
 }
+
+/**
+API web services functions
+*/
+// fetchAllEvents fetches all events
+func fetchAllEvents(c *gin.Context) {
+  var events []EventModel
+//  var _todos []transformedTodo
+//  db.Find(&events)
+  if len(events) <= 0 {
+    c.JSON(http.StatusNotFound, gin.H{"status": http.StatusNotFound, "message": "No event found!"})
+    return
+  }
+  c.JSON(http.StatusOK, gin.H{"status": http.StatusOK, "data": events})
+ }
+
+// fetchSingleEvent fetches a single event
+func fetchSingleEvent(c *gin.Context) {
+  var event EventModel
+//  eventID := c.Param("id")
+//  db.First(&todo, todoID)
+  if event.ID == 0 {
+    c.JSON(http.StatusNotFound, gin.H{"status": http.StatusNotFound, "message": "No event found!"})
+    return
+  }
+  c.JSON(http.StatusOK, gin.H{"status": http.StatusOK, "data": event})
+ }
+
+
 
 // JokeHandler retrieves a list of available jokes
 func JokeHandler(c *gin.Context) {
