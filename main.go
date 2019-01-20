@@ -37,33 +37,45 @@ type (
     Date         string      `json:"date"`
     Description  string      `json:"description"`
     Type         string      `json:"string"`
-    IsSoldOut    bool         `json:"issoldout"`
+    IsSoldOut    bool        `json:"issoldout"`
+    VenueModel   VenueModel  `json:"venuemodel"`
+    VenueModelID uint        `json:"venuemodelid"`
    }
 
    ZoneModel struct {
 //    gorm.Model
     Name         string      `json:"name"`
     Price        float64     `json:"country"`
+    VenueModel   VenueModel  `json:"venuemodel"`
+    VenueModelID uint        `json:"venuemodelid"`
    }
 
    SeatModel struct {
 //    gorm.Model
     Number       int         `json:"number"`
     IsAvailable  int         `json:"isavailable"`
+    ZoneModel    ZoneModel   `json:"zonemodel"`
+    ZoneModelID  uint        `json:"zonemodelid"`
    }
+
+   UserModel struct {
+    //    gorm.Model
+        Username     string      `json:"username"`
+        Age          string      `json:"age"`
+        Type         int         `json:"type"`
+        Password     string      `json:"password"`
+    }
 
    TicketModel struct {
 //    gorm.Model
     Number       int         `json:"number"`
-   }
-
-   UserModel struct {
-//    gorm.Model
-    Username     string      `json:"username"`
-    Age          string      `json:"age"`
-    Type         int         `json:"type"`
-    Password     string      `json:"password"`
-   }
+    SeatModel    SeatModel   `json:"seatmodel"`
+    SeatModelID  uint        `json:"seatmodelid"`
+    UserModel    UserModel   `json:"usermodel"`
+    UserModelID  uint        `json:"usermodelid"`
+    EventModel   EventModel  `json:"eventmodel"`
+    EventModelID uint        `json:"eventmodelid"`
+  }
  )
 
 // We'll create a list of jokes
