@@ -14,6 +14,11 @@ import (
 
 )
 
+type ResponseEvent struct{
+  Data    []Event   `json:"data"`
+  Status  int       `json:"status"`
+}
+
 func main() {
   //establish connection with DB
   /*db, err := sql.Open("postgres",
@@ -52,6 +57,7 @@ func main() {
   router.GET("/profile", renderProfile)
   router.POST("/api/login", login)
   router.GET("/logout", logout)
+  router.GET("/api/events", fetchAllEvents)
 
   router.GET("/", func(c *gin.Context){
     c.Redirect(http.StatusMovedPermanently, "/events")
