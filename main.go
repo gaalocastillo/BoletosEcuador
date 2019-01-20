@@ -7,9 +7,10 @@ import (
   "log"
   "fmt"
 
-
+//  "github.com/jinzhu/gorm"  
   "github.com/gin-gonic/gin"
    _ "github.com/lib/pq"
+  
 )
 
 
@@ -19,6 +20,51 @@ type Joke struct {
   Likes  int     `json:"likes"`
   Joke   string  `json:"joke" binding:"required"`
 }
+
+type (
+  VenueModel struct {
+  // gorm.Model
+   Type         string      `json:"type"`
+   Name         string      `json:"name"`
+   Country      int         `json:"country"`
+   City         int         `json:"city"`
+   Address      int         `json:"address"`
+  }
+
+  EventModel struct {
+  //  gorm.Model
+    Name         string      `json:"name"`
+    Date         string      `json:"date"`
+    Description  string      `json:"description"`
+    Type         string      `json:"string"`
+    IsSoldOut    bool         `json:"issoldout"`
+   }
+
+   ZoneModel struct {
+//    gorm.Model
+    Name         string      `json:"name"`
+    Price        float64     `json:"country"`
+   }
+
+   SeatModel struct {
+//    gorm.Model
+    Number       int         `json:"number"`
+    IsAvailable  int         `json:"isavailable"`
+   }
+
+   TicketModel struct {
+//    gorm.Model
+    Number       int         `json:"number"`
+   }
+
+   UserModel struct {
+//    gorm.Model
+    Username     string      `json:"username"`
+    Age          string      `json:"age"`
+    Type         int         `json:"type"`
+    Password     string      `json:"password"`
+   }
+ )
 
 // We'll create a list of jokes
 var jokes = []Joke{
@@ -127,6 +173,25 @@ func main() {
   api := router.Group("/api")
   {
     api.GET("/", func(c *gin.Context) {
+      c.JSON(http.StatusOK, gin.H {
+        "message": "pong",
+      })
+    })
+
+    api.GET("/events", func(c *gin.Context) {
+      c.JSON(http.StatusOK, gin.H {
+        "message": "pong",
+        "data": jokes,
+      })
+    })
+
+    api.GET("/events/:id", func(c *gin.Context) {
+      c.JSON(http.StatusOK, gin.H {
+        "message": "pong",
+      })
+    })
+
+    api.POST("/purchase", func(c *gin.Context) {
       c.JSON(http.StatusOK, gin.H {
         "message": "pong",
       })
