@@ -193,12 +193,7 @@ func main() {
 
     api.GET("/events", fetchAllEvents)
     api.GET("/events/:id", fetchSingleEvent)
-
-    api.POST("/purchase", func(c *gin.Context) {
-      c.JSON(http.StatusOK, gin.H {
-        "message": "pong",
-      })
-    })
+    api.POST("/purchase", purchaseTickets)
   }
 
   api.GET("/jokes", JokeHandler)
@@ -235,7 +230,28 @@ func fetchSingleEvent(c *gin.Context) {
   c.JSON(http.StatusOK, gin.H{"status": http.StatusOK, "data": event})
  }
 
+ // insert new tickets purchase
+func purchaseTickets(c *gin.Context) {  
+  seatsAmount, _ := strconv.Atoi(c.PostForm("seats-amount"))
+  userID, _ := strconv.Atoi(c.PostForm("user-ID"))
+  eventID, _ := strconv.Atoi(c.PostForm("event-ID"))
+  seatsIds := make([]int, seatsAmount)
+  eventID = eventID +1
+  userID = userID +1
 
+  for i := 0; i < seatsAmount; i++ {
+    //ticketsIds[i] = strconv. c.PostForm("tickets-ids")[i]
+    // if jokes[i].ID == jokeid {
+    //  jokes[i].Likes += 1
+   // }
+  }
+//  ticketsIds = c.PostForm("tickets-ids")
+  fmt.Println(seatsIds)
+//  completed, _ := strconv.Atoi(c.PostForm("completed"))
+ // todo := todoModel{Title: c.PostForm("title"), Completed: completed}
+//  db.Save(&todo)
+  //c.JSON(http.StatusCreated, gin.H{"status": http.StatusCreated, "message": "Todo item created successfully!", "resourceId": todo.ID})
+}
 
 // JokeHandler retrieves a list of available jokes
 func JokeHandler(c *gin.Context) {
