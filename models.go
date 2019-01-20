@@ -97,3 +97,14 @@ type DummySeat struct {
 	ZoneName   	string  `json:"zoneName" binding:"required"`
 	ZonePrice   float64	`json:"zonePrice" binding:"required"`
   }
+  // Joke contains information about a single Joke
+  type DummyTicket struct {
+	ID     			int     `json:"id" binding:"required"`
+	TicketNumber	int		`json:"ticketNumber" binding:"required"`
+	SeatNumber  	int     `json:"seatNumber" binding:"required"`
+	ZoneName   		string  `json:"zoneName" binding:"required"`
+	ZonePrice   	float64	`json:"zonePrice" binding:"required"`
+	EventName   	string	`json:"eventName" binding:"required"`
+  }
+
+  

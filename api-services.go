@@ -72,6 +72,26 @@ func fetchAvailableSeats(c *gin.Context) {
 	return
 }
 
+// fetchAllEvents fetches all events
+func fetchUserTickets(c *gin.Context) {	
+	var tickets = []DummyTicket{
+	DummyTicket{1, 102, 20, "General", 4.5, "Concierto Pancho Jaime"},
+	DummyTicket{2, 400, 120, "Golden Box", 350.0, "Obra teatral: Les Luthiers"},
+	DummyTicket{3, 103, 21, "General", 4.5, "Concierto Pancho Jaime"},
+}
+//  var _todos []transformedTodo
+//db.Find(&events)
+userID, _ := strconv.Atoi(c.Param("userID"))
+if userID <= 0 {
+	c.JSON(http.StatusNotFound, gin.H{"status": http.StatusNotFound, "message": "No event found!"})
+	return
+}
+if userID == 1 {
+	c.JSON(http.StatusOK, gin.H{"status": http.StatusOK, "data": tickets})
+	return
+}
+return
+}
 
 
    // insert new tickets purchase
