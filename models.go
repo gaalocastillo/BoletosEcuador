@@ -1,8 +1,8 @@
 package main
 
 import (
-	"github.com/jinzhu/gorm"  
-  )
+	"github.com/jinzhu/gorm"
+)
 
 type (
 	VenueModel struct {
@@ -15,7 +15,7 @@ type (
 	  Address       string      `json:"address"`
 	  Zones []ZoneModel
 	}
-  
+
 	EventModel struct {
 	  //un evento pertenece a un venue
 	  gorm.Model
@@ -26,27 +26,27 @@ type (
 	  IsSoldOut    bool        `json:"issoldout"`
 	  VenueModelID uint        `json:"venuemodelid"`
 	  VenueModel   VenueModel  `json:"venuemodel"`
-	 }
-  
-	 ZoneModel struct {
+	}
+
+	ZoneModel struct {
 	  //un venue tiene varias zonas
 	  //una zona tiene varios asientos
 	  gorm.Model
 	  Name         string      `json:"name"`
 	  Price        float64     `json:"price"`
-	  VenueModelID uint         `json:"venuemodelid"`  
-	  Seats []SeatModel  
-	 }
-  
-	 SeatModel struct {
+	  VenueModelID uint         `json:"venuemodelid"`
+	  Seats []SeatModel
+	}
+
+	SeatModel struct {
 	  //una zona tiene varios asientos
 	  gorm.Model
 	  Number       int         `json:"number"`
 	  IsAvailable  bool        `json:"isavailable"`
-	  ZoneModelID  uint        `json:"zonemodelid"`  
-	 }
-  
-	 UserModel struct {
+	  ZoneModelID  uint        `json:"zonemodelid"`
+	}
+
+	UserModel struct {
 	  //un usuario tiene varios tickets
 	  gorm.Model
 	  Username     string      `json:"username"`
@@ -54,9 +54,9 @@ type (
 	  User_type    string         `json:"type"`
 	  Password     string      `json:"password"`
 	  Tickets []TicketModel
-	  }
-  
-	 TicketModel struct {
+	}
+
+	TicketModel struct {
 	  //Un ticket pertenece a un usuario
 	  //Un ticket tiene un asiento
 	  //Un ticket pertenece a un evento
@@ -68,27 +68,17 @@ type (
 	  EventModel   EventModel  `json:"eventmodel"`
 	  EventModelID uint        `json:"eventmodelid"`
 	}
-   )
+)
 
+type ResponseEvents struct{
+	Data    []EventModel   	`json:"data"`
+	Status  int       			`json:"status"`
+}
 
-// Joke contains information about a single Joke
-type Joke struct {
-	ID     int     `json:"id" binding:"required"`
-	Likes  int     `json:"likes"`
-	Joke   string  `json:"joke" binding:"required"`
-  }
-  
-  // We'll create a list of jokes
-  var jokes = []Joke{
-	Joke{1, 0, "Did you hear about the restaurant on the moon? Great food, no atmosphere."},
-	Joke{2, 0, "What do you call a fake noodle? An Impasta."},
-	Joke{3, 0, "How many apples grow on a tree? All of them."},
-	Joke{4, 0, "Want to hear a joke about paper? Nevermind it's tearable."},
-	Joke{5, 0, "I just watched a program about beavers. It was the best dam program I've ever seen."},
-	Joke{6, 0, "Why did the coffee file a police report? It got mugged."},
-	Joke{7, 0, "How does a penguin build it's house? Igloos it together."},
-  }
-
+type ResponseEvent struct{
+	Data    EventModel   	`json:"data"`
+	Status  int       		`json:"status"`
+}
 
   // Joke contains information about a single Joke
 type DummySeat struct {
@@ -96,15 +86,13 @@ type DummySeat struct {
 	Number  	int     `json:"number" binding:"required"`
 	ZoneName   	string  `json:"zoneName" binding:"required"`
 	ZonePrice   float64	`json:"zonePrice" binding:"required"`
-  }
+}
   // Joke contains information about a single Joke
-  type DummyTicket struct {
+type DummyTicket struct {
 	ID     			int     `json:"id" binding:"required"`
 	TicketNumber	int		`json:"ticketNumber" binding:"required"`
 	SeatNumber  	int     `json:"seatNumber" binding:"required"`
 	ZoneName   		string  `json:"zoneName" binding:"required"`
 	ZonePrice   	float64	`json:"zonePrice" binding:"required"`
 	EventName   	string	`json:"eventName" binding:"required"`
-  }
-
-  
+}

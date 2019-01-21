@@ -14,12 +14,12 @@
     <h2 class="boletos-events-title align-center"> {{.event.Name}} </h2>
     <ul class="list-group list-group-flush">
       <li class="list-group-item"> Fecha: {{.event.Date}} </li>
-      <li class="list-group-item"> Tipo de Evento: {{.event.Type}} </li>
+      <li class="list-group-item"> Tipo de Evento: {{.event.EventType}} </li>
       <li class="list-group-item"> Descripcion: {{.event.Description}} </li>
     </ul>
 
     {{if .user}}
-      {{if eq .event.IsSoldOut "si" }}
+      {{if .event.IsSoldOut }}
         <h2 class="boletos-events-title align-center"> ENTRADAS NO DISPONIBLES </h2>
       {{else}}
         <h3 class="boletos-events-title align-center"> Comprar Boletos: </h3>

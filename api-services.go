@@ -4,10 +4,11 @@ import (
 	"strconv"
 	//"database/sql"
 	"fmt"
+	"github.com/jinzhu/gorm"
 	"github.com/gin-gonic/gin"
 	 _"github.com/jinzhu/gorm/dialects/postgres"
-	
-  )
+
+)
 
 /**
 API web services functions
@@ -15,21 +16,21 @@ API web services functions
 // fetchAllEvents fetches all events
 func fetchAllEvents(c *gin.Context) {
 	var events []EventModel
-  //  var _todos []transformedTodo
-  //db.Find(&events)
+	db := c.MustGet("DB").(*gorm.DB)
+  db.Find(&events)
 	if len(events) <= 0 {
 	  c.JSON(http.StatusNotFound, gin.H{"status": http.StatusNotFound, "message": "No event found!"})
 	  return
 	}
 	c.JSON(http.StatusOK, gin.H{"status": http.StatusOK, "data": events})
 }
-  
+
   // fetchSingleEvent fetches a single event
 func fetchSingleEvent(c *gin.Context) {
 	var event EventModel
-  //eventID := c.Param("id")
-	//  db.First(&todo, todoID)
-	// db.First(&event, eventID)
+  eventID := c.Param("id")
+	db := c.MustGet("DB").(*gorm.DB)
+	db.First(&event, eventID)
 	if event.ID == 0 {
 	  c.JSON(http.StatusNotFound, gin.H{"status": http.StatusNotFound, "message": "No event found!"})
 	  return
@@ -38,7 +39,7 @@ func fetchSingleEvent(c *gin.Context) {
 }
 
 // fetchAllEvents fetches all events
-func fetchAvailableSeats(c *gin.Context) {	
+func fetchAvailableSeats(c *gin.Context) {
 		var seats1 = []DummySeat{
 		DummySeat{1, 101, "General", 10.0},
 		DummySeat{2, 102, "General", 10.0},
@@ -73,36 +74,36 @@ func fetchAvailableSeats(c *gin.Context) {
 }
 
 // fetchAllEvents fetches all events
-func fetchUserTickets(c *gin.Context) {	
+func fetchUserTickets(c *gin.Context) {
 	var tickets = []DummyTicket{
-	DummyTicket{1, 102, 20, "General", 4.5, "Concierto Pancho Jaime"},
-	DummyTicket{2, 400, 120, "Golden Box", 350.0, "Obra teatral: Les Luthiers"},
-	DummyTicket{3, 103, 21, "General", 4.5, "Concierto Pancho Jaime"},
-}
-//  var _todos []transformedTodo
-//db.Find(&events)
-userID, _ := strconv.Atoi(c.Param("userID"))
-if userID <= 0 {
-	c.JSON(http.StatusNotFound, gin.H{"status": http.StatusNotFound, "message": "No event found!"})
+		DummyTicket{1, 102, 20, "General", 4.5, "Concierto Pancho Jaime"},
+		DummyTicket{2, 400, 120, "Golden Box", 350.0, "Obra teatral: Les Luthiers"},
+		DummyTicket{3, 103, 21, "General", 4.5, "Concierto Pancho Jaime"},
+	}
+	//  var _todos []transformedTodo
+	//db.Find(&events)
+	userID, _ := strconv.Atoi(c.Param("userID"))
+	if userID <= 0 {
+		c.JSON(http.StatusNotFound, gin.H{"status": http.StatusNotFound, "message": "No event found!"})
+		return
+	}
+	if userID == 1 {
+		c.JSON(http.StatusOK, gin.H{"status": http.StatusOK, "data": tickets})
+		return
+	}
 	return
-}
-if userID == 1 {
-	c.JSON(http.StatusOK, gin.H{"status": http.StatusOK, "data": tickets})
-	return
-}
-return
 }
 
 
    // insert new tickets purchase
-func purchaseTickets(c *gin.Context) {  
+func purchaseTickets(c *gin.Context) {
 	seatsAmount, _ := strconv.Atoi(c.PostForm("seats-amount"))
 	userID, _ := strconv.Atoi(c.PostForm("user-ID"))
 	eventID, _ := strconv.Atoi(c.PostForm("event-ID"))
 	seatsIds := make([]int, seatsAmount)
 	eventID = eventID +1
 	userID = userID +1
-  
+
 	for i := 0; i < seatsAmount; i++ {
 	  //ticketsIds[i] = strconv. c.PostForm("tickets-ids")[i]
 	  // if jokes[i].ID == jokeid {
