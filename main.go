@@ -1,6 +1,7 @@
 package main
 
 import (
+  // "fmt"
   "net/http"
   "log"
 
@@ -10,11 +11,15 @@ import (
    _"github.com/jinzhu/gorm/dialects/postgres"
 )
 
+type ResponseEvent struct{
+  Data    []Event   `json:"data"`
+  Status  int       `json:"status"`
+}
+
 func main() {
 
   // Set the router as the default one shipped with Gin
   router := gin.Default()
-
   store := sessions.NewCookieStore([]byte("secret"))
   router.Use(sessions.Sessions("mysession", store))
 
@@ -22,6 +27,7 @@ func main() {
   router.LoadHTMLGlob("views/*")
   router.Static("/stylesheets", "./public/stylesheets")
   router.Static("/js", "./public/js")
+
 
   router.GET("/events", renderEvents)
   router.GET("/events/:id", renderEvent)
@@ -64,3 +70,4 @@ func Database() gin.HandlerFunc {
       c.Next()
   }
 }
+

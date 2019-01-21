@@ -76,6 +76,7 @@ func renderProfile(c *gin.Context) {
   }
 }
 
+
 func doEventsRequirement(c *gin.Context) ResponseEvents{
   response, err := http.Get("http://127.0.0.1:3001/api/events")
   fmt.Println("Err: ", err)
@@ -89,6 +90,7 @@ func doEventsRequirement(c *gin.Context) ResponseEvents{
     log.Fatal(readErr)
   }
   events := ResponseEvents{}
+
   jsonErr := json.Unmarshal(body, &events)
   if jsonErr != nil {
     log.Fatal(jsonErr)
