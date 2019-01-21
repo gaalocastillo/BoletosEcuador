@@ -2,7 +2,6 @@ package main
 
 import (
 	"net/http"
-  "strconv"
   "fmt"
   "encoding/json"
   "io/ioutil"
@@ -26,19 +25,12 @@ func renderEvents(c *gin.Context) {
 func renderEvent(c *gin.Context) {
 	session := sessions.Default(c)
 	user := session.Get("user")
-  events:= doEventsRequirement(c).Data
-  if eventId, err := strconv.Atoi(c.Param("id")); err == nil {
-    for i := 0; i < len(events); i++ {
-      if events[i].ID == eventId {
-        c.HTML(http.StatusOK, "event.tmpl", gin.H{
-          "event": events[i],
-          "user": user,
-        })
-      }
-    }
-  } else {
-    c.AbortWithStatus(http.StatusNotFound)
-  }
+	event:= doEventRequirement(c, c.Param("id")).Data
+
+  c.HTML(http.StatusOK, "event.tmpl", gin.H{
+    "user": user,
+		"event": event,
+  })
 }
 
 func renderLogin(c *gin.Context) {
@@ -84,8 +76,8 @@ func renderProfile(c *gin.Context) {
   }
 }
 
-func doEventsRequirement(c *gin.Context) ResponseEvent{
-  response, err := http.Get("http://127.0.0.1:4002/api/events")
+func doEventsRequirement(c *gin.Context) ResponseEvents{
+  response, err := http.Get("http://127.0.0.1:3001/api/events")
   fmt.Println("Err: ", err)
   if err != nil || response.StatusCode != http.StatusOK {
     c.Status(http.StatusServiceUnavailable)
@@ -96,10 +88,31 @@ func doEventsRequirement(c *gin.Context) ResponseEvent{
   if readErr != nil {
     log.Fatal(readErr)
   }
-  events := ResponseEvent{}
+  events := ResponseEvents{}
   jsonErr := json.Unmarshal(body, &events)
   if jsonErr != nil {
     log.Fatal(jsonErr)
   }
   return events
+}
+
+func doEventRequirement(c *gin.Context, ID string) ResponseEvent{
+  response, err := http.Get("http://127.0.0.1:3001/api/events/" + ID)
+  fmt.Println("Err: ", err)
+  if err != nil || response.StatusCode != http.StatusOK {
+    c.Status(http.StatusServiceUnavailable)
+  }
+
+  body, readErr := ioutil.ReadAll(response.Body)
+  fmt.Println("Response ", string(body))
+  if readErr != nil {
+    log.Fatal(readErr)
+  }
+  event := ResponseEvent{}
+  jsonErr := json.Unmarshal(body, &event)
+  if jsonErr != nil {
+    log.Fatal(jsonErr)
+		c.AbortWithStatus(http.StatusNotFound)
+  }
+  return event
 }
