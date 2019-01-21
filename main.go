@@ -11,10 +11,6 @@ import (
    _"github.com/jinzhu/gorm/dialects/postgres"
 )
 
-type ResponseEvent struct{
-  Data    []Event   `json:"data"`
-  Status  int       `json:"status"`
-}
 
 func main() {
 
@@ -70,4 +66,3 @@ func Database() gin.HandlerFunc {
       c.Next()
   }
 }
-
