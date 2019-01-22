@@ -69,27 +69,32 @@ func fetchAvailableSeats(c *gin.Context) {
 	return
 }
 
-// fetchAllEvents fetches all events
 func fetchUserTickets(c *gin.Context) {
-	var tickets = []DummyTicket{
-		DummyTicket{1, 102, 20, "General", 4.5, "Concierto Pancho Jaime"},
-		DummyTicket{2, 400, 120, "Golden Box", 350.0, "Obra teatral: Les Luthiers"},
-		DummyTicket{3, 103, 21, "General", 4.5, "Concierto Pancho Jaime"},
-	}
-	//  var _todos []transformedTodo
-	//db.Find(&events)
-	userID, _ := strconv.Atoi(c.Param("userID"))
+	var userTickets []TicketModel
+	var user UserModel
+
+	userID := 1
+	db := c.MustGet("DB").(*gorm.DB)
+	db.First(&user, userID)
 	if userID <= 0 {
-		c.JSON(http.StatusNotFound, gin.H{"status": http.StatusNotFound, "message": "No event found!"})
+		c.JSON(http.StatusNotFound, gin.H{"status": http.StatusNotFound, "message": "User not found!"})
 		return
 	}
-	if userID == 1 {
-		c.JSON(http.StatusOK, gin.H{"status": http.StatusOK, "data": tickets})
-		return
+	db.Model(&user).Related(&userTickets)
+	var tempSeat SeatModel
+	var tempZone ZoneModel
+	var tempEvent EventModel
+	var data []DummyTicket
+	for _, ticket := range userTickets{
+		db.Model(&ticket).Related(&tempSeat)
+		db.Model(&tempSeat).Related(&tempZone)
+		db.Model(&ticket).Related(&tempEvent)
+		dt := DummyTicket{int(ticket.ID), ticket.Number, tempSeat.Number, tempZone.Name, tempZone.Price, tempEvent.Name}
+		data = append(data, dt)
 	}
+	c.JSON(http.StatusOK, gin.H{"status": http.StatusOK, "data": data})
 	return
 }
-
 
    // insert new tickets purchase
 func purchaseTickets(c *gin.Context) {

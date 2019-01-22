@@ -96,10 +96,10 @@ INSERT INTO seat_models (id, created_at, updated_at, deleted_at, number, is_avai
 	(419244221795860481, NULL, NULL, NULL, 3, true, 419241097457270785);
 
 INSERT INTO ticket_models (id, created_at, updated_at, deleted_at, number, seat_model_id, user_model_id, event_model_id) VALUES
-	(419244768004046849, NULL, NULL, NULL, 2, 5, 1, 1);
+	(419244768004046849, NULL, NULL, NULL, 2, 419244114719866881, 1, 419240354550382593);
 
 INSERT INTO user_models (id, created_at, updated_at, deleted_at, username, age, user_type, password) VALUES
-	(419241822117593089, NULL, NULL, NULL, 'galox14', 22, 'corriente', 'galox14');
+	(1, NULL, NULL, NULL, 'galox14', 22, 'corriente', 'galox14');
 
 INSERT INTO venue_models (id, created_at, updated_at, deleted_at, venue_type, name, country, city, address) VALUES
 	(419239655077937153, NULL, NULL, NULL, 'estadio', 'Estadio Alberto Spencer', 'Ecuador', 'Guayaquil', 'Av.de las Americas'),

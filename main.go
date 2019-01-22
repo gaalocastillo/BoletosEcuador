@@ -44,7 +44,7 @@ func main() {
     api.GET("/events", fetchAllEvents)
     api.GET("/events/:id", fetchSingleEvent)
     api.GET("/seats/:eventID", fetchAvailableSeats)
-    api.GET("/user_tickets/:userID", fetchUserTickets)
+    api.GET("/user_tickets/", fetchUserTickets)
     api.POST("/purchase", purchaseTickets)
   }
 
