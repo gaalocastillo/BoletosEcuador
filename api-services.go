@@ -38,38 +38,34 @@ func fetchSingleEvent(c *gin.Context) {
 	c.JSON(http.StatusOK, gin.H{"status": http.StatusOK, "data": event})
 }
 
-// fetchAllEvents fetches all events
+// fetchAvailableSeats obtains all seats available, given an event
 func fetchAvailableSeats(c *gin.Context) {
-		var seats1 = []DummySeat{
-		DummySeat{1, 101, "General", 10.0},
-		DummySeat{2, 102, "General", 10.0},
-		DummySeat{3, 103, "General", 10.0},
-		DummySeat{4, 201, "Tribuna", 15.0},
-		DummySeat{5, 202, "Tribuna", 15.0},
-		DummySeat{6, 301, "VIP", 30.0},
-	}
+	var event EventModel
+	var venue VenueModel
+	var zones []ZoneModel
+	var allSeats []SeatModel
+	var availableSeats []DummySeat
 
-	var seats2 = []DummySeat{
-		DummySeat{1, 1, "General", 5.0},
-		DummySeat{2, 2, "General", 5.0},
-		DummySeat{3, 3, "General", 5.0},
-	}
-  //  var _todos []transformedTodo
-	//db.Find(&events)
-	eventID, _ := strconv.Atoi(c.Param("eventID"))
-	if eventID <= 0 {
+	eventID := c.Param("eventID")
+	db := c.MustGet("DB").(*gorm.DB)
+	db.First(&event, eventID)
+	if event.ID == 0 {
+		fmt.Println("ALGO PASA")
 	  c.JSON(http.StatusNotFound, gin.H{"status": http.StatusNotFound, "message": "No event found!"})
 	  return
 	}
-
-	if eventID == 1 {
-		c.JSON(http.StatusOK, gin.H{"status": http.StatusOK, "data": seats1})
-		return
+	db.Model(&event).Related(&venue)
+	db.Model(&venue).Related(&zones)
+	for _, zone := range zones {
+			db.Model(&zone).Related(&allSeats)
+			for _, seat := range allSeats {
+				if seat.IsAvailable == true{
+					ds := DummySeat{int(seat.ID), seat.Number, zone.Name, zone.Price}
+					availableSeats = append(availableSeats, ds)
+				}
+			}
 	}
-	if eventID == 2{
-		c.JSON(http.StatusOK, gin.H{"status": http.StatusOK, "data": seats2})
-		return
-	}
+	c.JSON(http.StatusOK, gin.H{"status": http.StatusOK, "data": availableSeats})
 	return
 }
 
@@ -97,7 +93,7 @@ func fetchUserTickets(c *gin.Context) {
 
    // insert new tickets purchase
 func purchaseTickets(c *gin.Context) {
-	seatsAmount, _ := strconv.Atoi(c.PostForm("seats-amount"))
+	seatsAmount, _ := strconv.Atoi(c.PostForm("seats"))
 	userID, _ := strconv.Atoi(c.PostForm("user-ID"))
 	eventID, _ := strconv.Atoi(c.PostForm("event-ID"))
 	seatsIds := make([]int, seatsAmount)
