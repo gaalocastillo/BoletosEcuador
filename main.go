@@ -32,6 +32,7 @@ func main() {
   router.GET("/profile", renderProfile)
   router.POST("/api/login", login)
   router.GET("/logout", logout)
+  router.GET("/ping", ping)
 
   router.GET("/", func(c *gin.Context){
     c.Redirect(http.StatusMovedPermanently, "/events")
