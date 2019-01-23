@@ -96,25 +96,37 @@ func fetchUserTickets(c *gin.Context) {
 	return
 }
 
-   // insert new tickets purchase
+// insert new tickets purchase
 func purchaseTickets(c *gin.Context) {
-	seatsAmount, _ := strconv.Atoi(c.PostForm("seats"))
-	userID, _ := strconv.Atoi(c.PostForm("user-ID"))
-	eventID, _ := strconv.Atoi(c.PostForm("event-ID"))
-	seatsIds := make([]int, seatsAmount)
-	eventID = eventID +1
-	userID = userID +1
-
-	for i := 0; i < seatsAmount; i++ {
-	  //ticketsIds[i] = strconv. c.PostForm("tickets-ids")[i]
-	  // if jokes[i].ID == jokeid {
-	  //  jokes[i].Likes += 1
-	 // }
+	seatID, _ := strconv.Atoi(c.PostForm("seat-ID"))
+	db := c.MustGet("DB").(*gorm.DB)	
+	var seat SeatModel
+	db.First(&seat, seatID)
+	if seat.ID <= 0 {
+		c.JSON(http.StatusNotFound, gin.H{"status": http.StatusNotFound, "message": "No seat found!"})
+		return
 	}
-  //  ticketsIds = c.PostForm("tickets-ids")
-	fmt.Println(seatsIds)
-  //  completed, _ := strconv.Atoi(c.PostForm("completed"))
-   // todo := todoModel{Title: c.PostForm("title"), Completed: completed}
-  //  db.Save(&todo)
-	//c.JSON(http.StatusCreated, gin.H{"status": http.StatusCreated, "message": "Todo item created successfully!", "resourceId": todo.ID})
+	if seat.IsAvailable == false {
+		c.JSON(http.StatusNotFound, gin.H{"status": http.StatusBadRequest, "message": "Sorry. That seat is unavailable!"})
+		return
+	}
+
+	eventID, _ := strconv.Atoi(c.PostForm("event-ID"))
+	userID, _ := strconv.Atoi(c.PostForm("user-ID"))
+	var event EventModel
+	var ticket TicketModel
+	db.First(&event, eventID)
+	if userID <= 0{
+		c.JSON(http.StatusNotFound, gin.H{"status": http.StatusNotFound, "message": "No user found!"})
+		return
+	}
+	if event.ID <= 0{
+		c.JSON(http.StatusNotFound, gin.H{"status": http.StatusNotFound, "message": "No event found!"})
+		return
+	}
+	ticket = TicketModel{SeatModel: seat, UserModelID: uint(userID), EventModel: event}
+	db.Save(&ticket)
+	db.Model(&seat).Update("IsAvailable", false)
+	c.JSON(http.StatusOK, gin.H{"status": http.StatusOK, "message": "Transaction successfully completed!"})
+	return
 }
