@@ -52,7 +52,7 @@ func main() {
 }
 
 func Database() gin.HandlerFunc {
-  const addr = "postgresql://cucaracha:cucarachaAdmin@localhost:26257/boletos_ecuador_db?ssl=true&sslmode=require&sslrootcert=./certs/ca.crt&sslkey=./certs/client.cucaracha.key&sslcert=./certs/client.cucaracha.crt"
+  const addr = "postgresql://cucaracha@18.224.37.116:26257/boletos_ecuador_db?sslmode=disable"
   db, err := gorm.Open("postgres", addr)
   if err != nil {
       log.Fatal(err)
