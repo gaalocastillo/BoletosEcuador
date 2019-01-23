@@ -80,12 +80,12 @@ func fetchUserTickets(c *gin.Context) {
 		c.JSON(http.StatusNotFound, gin.H{"status": http.StatusNotFound, "message": "User not found!"})
 		return
 	}
-	db.Model(&user).Related(&userTickets)
-	var tempSeat SeatModel
-	var tempZone ZoneModel
-	var tempEvent EventModel
 	var data []DummyTicket
+	db.Model(&user).Related(&userTickets)
 	for _, ticket := range userTickets{
+		var tempSeat SeatModel
+		var tempZone ZoneModel
+		var tempEvent EventModel
 		db.Model(&ticket).Related(&tempSeat)
 		db.Model(&tempSeat).Related(&tempZone)
 		db.Model(&ticket).Related(&tempEvent)
