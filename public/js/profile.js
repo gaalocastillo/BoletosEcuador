@@ -1,5 +1,5 @@
 $(document).ready(function(){
-  $.get("api/user_tickets/", function(data, err){
+  $.get("/api/user_tickets/", function(data, err){
     if (err == "success"){
       var seats = data["data"];
       for (var i = 0; i < seats.length; i++){

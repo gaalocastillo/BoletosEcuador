@@ -60,7 +60,7 @@ func fetchAvailableSeats(c *gin.Context) {
 			db.Model(&zone).Related(&allSeats)
 			for _, seat := range allSeats {
 				if seat.IsAvailable == true{
-					ds := DummySeat{int(seat.ID), seat.Number, zone.Name, zone.Price}
+					ds := DummySeat{strconv.Itoa(int(seat.ID)), seat.Number, zone.Name, zone.Price}
 					availableSeats = append(availableSeats, ds)
 				}
 			}
@@ -89,7 +89,7 @@ func fetchUserTickets(c *gin.Context) {
 		db.Model(&ticket).Related(&tempSeat)
 		db.Model(&tempSeat).Related(&tempZone)
 		db.Model(&ticket).Related(&tempEvent)
-		dt := DummyTicket{int(ticket.ID), ticket.Number, tempSeat.Number, tempZone.Name, tempZone.Price, tempEvent.Name}
+		dt := DummyTicket{strconv.Itoa(int(ticket.ID)), ticket.Number, tempSeat.Number, tempZone.Name, tempZone.Price, tempEvent.Name}
 		data = append(data, dt)
 	}
 	c.JSON(http.StatusOK, gin.H{"status": http.StatusOK, "data": data})
@@ -99,7 +99,7 @@ func fetchUserTickets(c *gin.Context) {
 // insert new tickets purchase
 func purchaseTickets(c *gin.Context) {
 	seatID, _ := strconv.Atoi(c.PostForm("seat-ID"))
-	db := c.MustGet("DB").(*gorm.DB)	
+	db := c.MustGet("DB").(*gorm.DB)
 	var seat SeatModel
 	db.First(&seat, seatID)
 	if seat.ID <= 0 {
