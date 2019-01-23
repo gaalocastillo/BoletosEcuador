@@ -7,7 +7,7 @@ $(document).ready(function(){
         $("#boletos-tickets-comprados").append("" +
           "<li class='list-group-item'>" +
             "Evento: " + seat.eventName + "<br>" +
-            "Numbero de Asiento: " + seat.ticketNumber + "<br>" +
+            "Numbero de Asiento: " + seat.seatNumber + "<br>" +
             "Zona: " + seat.zoneName + "<br>" +
             "Precio: " + seat.zonePrice + "<br>" +
           "</li>"
