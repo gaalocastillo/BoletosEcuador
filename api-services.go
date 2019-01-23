@@ -130,3 +130,9 @@ func purchaseTickets(c *gin.Context) {
 	c.JSON(http.StatusOK, gin.H{"status": http.StatusOK, "message": "Transaction successfully completed!"})
 	return
 }
+
+func ping(c *gin.Context){
+	c.JSON(http.StatusOK, gin.H{
+		"status": http.StatusOK,
+	})
+}
