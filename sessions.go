@@ -37,7 +37,7 @@ func login(c *gin.Context) {
 		c.Redirect(http.StatusMovedPermanently, "/login?statusCode=1")
 		return
 	}
-	if username == "hello" && password == "itsme" {
+	if (username == "Leonardo" && password == "leonardo") || (username == "Galo" && password == "galo") {
 		session.Set("user", username) //In real world usage you'd set this to the users ID
 		err := session.Save()
 		if err != nil {
