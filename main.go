@@ -6,7 +6,8 @@ import (
   "log"
 
   "github.com/jinzhu/gorm"
-  "github.com/gin-gonic/contrib/sessions"
+  "github.com/gin-contrib/sessions"
+  "github.com/gin-contrib/sessions/redis"
   "github.com/gin-gonic/gin"
    _"github.com/jinzhu/gorm/dialects/postgres"
 )
@@ -16,7 +17,7 @@ func main() {
 
   // Set the router as the default one shipped with Gin
   router := gin.Default()
-  store := sessions.NewCookieStore([]byte("secret"))
+  store, _ := redis.NewStore(64, "tcp", "18.224.37.116:6379", "", []byte("secret"))
   router.Use(sessions.Sessions("mysession", store))
 
   // Serve frontend static files
