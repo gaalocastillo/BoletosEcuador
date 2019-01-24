@@ -20,9 +20,13 @@ Follow the next steps for configuring the database
 ### Installing Golang on Ubuntu
 Run the following commands:
 `sudo apt-get update;`
+
 `sudo apt-get -y upgrade;`
+
 `wget https://dl.google.com/go/go1.11.4.linux-amd64.tar.gz`
+
 `sudo tar -xvf go1.11.4.linux-amd64.tar.gz
+
 sudo mv go /usr/local`
 
 Setup Go Environment:
